@@ -1,0 +1,40 @@
+﻿@page "/Profiles/{userName}/Followers"
+@using WebApplication.Models
+@model WebApplication.Pages.Profile.FollowersModel
+@{
+    ViewData["Title"] = $"{Model.UserProfile!.UserName}'s followers";
+}
+
+<div class="flex-column" style="width: 700px; padding: 10px; gap: 10px; background-color: #101010">
+    @if (!Model.UserProfile.Followers.Any())
+    {
+        <div class="center" style="height: inherit;">
+            <span style="font-size: 30px;">No users were found.</span>
+        </div>
+    }
+    else
+    {
+        @foreach (var user in Model.UserProfile.Followers)
+        {
+            <div class="flex-row" style="border-radius: 15px; height: auto; gap: 10px; background-color: #0A0A0A; padding: 10px; justify-content: space-between;">
+                <div style="overflow: hidden;">
+                    <a class="minimal-link" style="width: 100%;" asp-page="/Profile/Profile" asp-route-user="@user.UserName">
+                        <div class="flex-row" style="gap: 20px;">
+                            <img src="@(user.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid lightblue" />
+                            <span style="font-size: 40px;">@user.UserName</span>
+                        </div>
+                    </a>
+                </div>
+                @if (Model.UserProfile == Model.CurrentUser)
+                {
+                    <div class="center" style="border-left: 1px solid white">
+                        <form method="post" asp-page-handler="RemoveFollower">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="minimal-button" style="font-size: 50px; margin-left: 10px; border: none;">X</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

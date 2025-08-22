@@ -1,0 +1,60 @@
+﻿.auth-container {
+    width: 450px;
+    gap: 30px;
+}
+
+.form-div {
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.subform-div {
+    gap: 20px;
+}
+
+.subform {
+    width: 100%;
+    border-bottom: 2px solid;
+}
+
+.subform-submit {
+    margin-bottom: 40px;
+}
+
+.form-label {
+    font-weight: bold;
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: block;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.validation-message {
+    font-size: 25px;
+    color: red;
+}
+
+div.validation-message ul {
+    margin-block: 0px;
+}

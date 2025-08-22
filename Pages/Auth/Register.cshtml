@@ -1,0 +1,35 @@
+﻿@page
+@model WebApplication.Pages.Auth.RegisterModel
+@{
+    Layout = "CenterLayout";
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-container center flex-column" style="height: 100%">
+    <div asp-validation-summary="ModelOnly" class="validation-message" style="font-size: 30px;"></div>
+    <form method="post">
+        <div class="form-div flex-column">
+            <label asp-for="RegistrationModel.EmailModel.Email" class="form-label" style="font-size: 30px;">Email</label>
+            <input asp-for="RegistrationModel.EmailModel.Email" class="form-input" style="font-size: 30px;" />
+            <span asp-validation-for="RegistrationModel.EmailModel.Email" class="validation-message"></span>
+        </div>
+        <div class="form-div flex-column">
+            <label asp-for="RegistrationModel.UserNameModel.UserName" class="form-label" style="font-size: 30px;">Username</label>
+            <input asp-for="RegistrationModel.UserNameModel.UserName" class="form-input" style="font-size: 30px;" />
+            <span asp-validation-for="RegistrationModel.UserNameModel.UserName" class="validation-message"></span>
+        </div>
+        <div class="form-div flex-column">
+            <label asp-for="RegistrationModel.PasswordConfirmationModel.Password" class="form-label" style="font-size: 30px;">Password</label>
+            <input asp-for="RegistrationModel.PasswordConfirmationModel.Password" type="password" class="form-input" style="font-size: 30px;" />
+            <span asp-validation-for="RegistrationModel.PasswordConfirmationModel.Password" class="validation-message"></span>
+        </div>
+        <div class="form-div flex-column">
+            <label asp-for="RegistrationModel.PasswordConfirmationModel.PasswordConfirmation" class="form-label" style="font-size: 30px;">Confirm password</label>
+            <input asp-for="RegistrationModel.PasswordConfirmationModel.PasswordConfirmation" type="password" class="form-input" style="font-size: 30px;" type="password" />
+            <span asp-validation-for="RegistrationModel.PasswordConfirmationModel.PasswordConfirmation" class="validation-message"></span>
+        </div>
+        <div class="form-div flex-column">
+            <input type="submit" value="Register" />
+        </div>
+    </form>
+</div>

@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WebApplication.Models
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/site.css" />
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 80px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            padding: 10px;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        details[open] .dropdown-content {
+            display: block;
+        }
+
+        summary {
+            list-style: none;
+            cursor: pointer;
+            list-style-type: none;
+            outline: none;
+        }
+    </style>
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <div class="center" style="justify-content: space-between; padding: 5px;">
+                <div class="nav-div">
+                    <a class="minimal-link nav-item" asp-page="/Main/Home">Home</a>
+                    <a class="minimal-link nav-item" asp-page="/Main/Search">Search</a>
+                </div>
+                <div class="nav-div flex-row">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        <details class="dropdown">
+                            <summary>
+                                <img src="@(user!.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 75px; height: 75px; border-radius: 50%; border: 1px solid lightblue">
+                            </summary>
+                            <div class="dropdown-content">
+                                <a asp-page="/Profile/Profile" asp-route-user="@user!.UserName">Profile</a>
+                                <a asp-page="/Main/Home" asp-page-handler="LogOut">Logout</a>
+                            </div>
+                        </details>
+                    }
+                    else
+                    {
+                        <div style="padding-block: 10px;">
+                            <a class="minimal-link nav-item" asp-page="/Auth/Login">Login</a>
+                            <a class="minimal-link nav-item" asp-page="/Auth/Register">Register</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="center">
+        @RenderBody()
+    </div>
+</body>
+</html>

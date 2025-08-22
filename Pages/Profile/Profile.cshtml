@@ -1,0 +1,121 @@
+﻿@page "/Profiles/{user}"
+@using Microsoft.AspNetCore.Identity
+@using WebApplication.Models
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@model WebApplication.Pages.Profile.ProfileModel
+@{
+    ViewData["Title"] = $"{Model.UserProfile!.UserName}'s profile";
+    ApplicationUser? currentUser = await UserManager.GetUserAsync(User);
+}
+
+@section Styles {
+    <link href="/css/forms.css" rel="stylesheet" />
+}
+
+<div class="flex-column" style="width: 900px; padding: 20px; background-color: #101010">
+    <div class="flex-row">
+        <div>
+            <img src="@(Model.UserProfile.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 250px; height: 250px; border-radius: 50%; border: 3px solid lightblue" />
+        </div>
+        <div class="flex-column" style="width: 100%; padding: 0px 35px; justify-content: space-between; overflow-wrap: anywhere;">
+            <div class="flex-column" style="gap: 20px;">
+                <span style="font-size: 40px; ">
+                    @Model.UserProfile.UserName
+                </span>
+                <span style="font-size: 20px;">
+                    @Model.UserProfile.ProfileDescription
+                </span>
+            </div>
+            <div class="flex-row" style="justify-content: space-between; align-items: center">
+                <div class="flex-row" style="gap: 10px;">
+                    @if (Model.UserProfile == currentUser)
+                    {
+                        <button class="minimal-button">
+                            <a asp-page="/Profile/EditProfile" class="minimal-link">Edit profile</a>
+                        </button>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="FollowUser">
+                            <input type="hidden" name="userName" value="@Model.UserProfile.UserName" />
+                            <button type="submit" class="minimal-button">
+                                @if (Model.UserProfile.Followers.Contains(currentUser!))
+                                {
+                                    @:Unfollow
+                                }
+                                else
+                                {
+                                    @:Follow
+                                }
+                            </button>
+                        </form>
+                    }
+                </div>
+                <div class="flex-row" style="gap: 20px;">
+                    <a asp-page="/Profile/Followers" asp-route-userName="@Model.UserProfile.UserName" class="minimal-link">
+                        <div class="flex-column center">
+                            <span style="font-size: 25px;">@Model.UserProfile.Followers.Count</span>
+                            <span style="font-size: 20px;">followers</span>
+                        </div>
+                    </a>
+                    <a asp-page="/Profile/Following" asp-route-userName="@Model.UserProfile.UserName" class="minimal-link">
+                        <div class="flex-column center">
+                            <span style="font-size: 25px;">@Model.UserProfile.Following.Count</span>
+                            <span style="font-size: 20px;">following</span>
+                        </div>
+                    </a>
+                    <!--<span style="font-size: 20px;">Member since @Model.UserProfile.RegistrationDateTime.ToShortDateString()</span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="margin-block: 20px; width: 100%;" />
+    <div class="flex-column" style="gap: 10px;">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <form method="post" asp-page-handler="ProfilePostSubmiting" style="margin-bottom: 10px;" enctype="multipart/form-data">
+                <div class="flex-column" style="gap: 10px;">
+                    <div class="flex-row" style="gap: 10px;">
+                        <textarea placeholder="Enter text to post..." name="content" style="font-size: 30px; width: 800px; min-height: 100px; resize: none;"></textarea>
+                        <input type="submit" value="Send" class="minimal-button" style="width: min-content;" />
+                    </div>
+                    <input type="file" name="file" accept=".jpg,.png,.gif" style="font-size: 25px;">
+                </div>
+            </form>
+            <div asp-validation-summary="ModelOnly" class="validation-message"></div>
+        }
+        @foreach (var post in Model.UserProfile.ProfilePosts.OrderByDescending(post => post.CreationDateTime))
+        {
+            <div class="flex-column" style="border-radius: 15px; background-color: #0A0A0A; padding: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between;">
+                    <a asp-page="/Profile/Profile" asp-route-user="@post.Author" class="minimal-link">
+                        <div class="flex-row" style="align-items: center;">
+                            <img src="@(post.Author.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 100px; height: 100px; border-radius: 50%; border: 1px solid lightblue" />
+                            <div class="flex-column" style="margin-left: 10px;">
+                                <span style="font-size: 30px;">@post.Author.UserName</span>
+                                <span style="font-style: italic;">@post.CreationDateTime.ToString("dd.MM.yyyy HH:mm")</span>
+                            </div>
+                        </div>
+                    </a>
+                    @if (Model.UserProfile == currentUser || currentUser == post.Author)
+                    {
+                        <div style="align-items: end;">
+                            <form method="post" asp-page-handler="DeleteProfilePost">
+                                <input type="hidden" name="id" value="@post.Id" />
+                                <button type="submit" class="minimal-button">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+                <div class="flex-column" style="padding: 15px; gap: 15px;">
+                    <span style="font-size: 20px;">@post.Content</span>
+                    @if (post.MediaPath != null)
+                    {
+                        <img src="@post.MediaPath" alt="Picture" style="max-width: 600px; max-height: 600px; align-self: center; border: 1px solid black;" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

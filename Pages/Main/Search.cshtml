@@ -1,0 +1,29 @@
+﻿@page
+@model WebApplication.Pages.Main.SearchModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="container flex-column" style="width: 600px; height: 260px; background-color: #101010">
+    <div class="container" style="width: inherit; border-bottom: 1px solid white;">
+        <form method="get">
+            <input type="search" placeholder="Enter a username" class="search-bar" style="margin: 20px" maxlength="18" asp-for="UserName" />
+            <button type="submit" class="minimal-button" style="font-size: 30px;">Find</button>
+        </form>
+    </div>
+    @if (Model.SearchResult != null)
+    {
+        <div class="container flex-row" style="padding: 10px;">
+            <a class="minimal-link" style="width: 100%;" asp-page="/Profile/Profile" asp-route-user="@Model.SearchResult.UserName">
+                <img src="@(Model.SearchResult.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid lightblue" />
+                <span style="font-size: 40px; position: absolute; margin-left: 20px;">@Model.SearchResult.UserName</span>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="center" style="height: inherit;">
+            <span style="font-size: 30px;">No user was found.</span>
+        </div>
+    }
+</div>

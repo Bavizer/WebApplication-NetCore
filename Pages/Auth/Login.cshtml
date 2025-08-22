@@ -1,0 +1,29 @@
+﻿@page
+@model WebApplication.Pages.Auth.LoginModel
+@{
+    Layout = "CenterLayout";
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-container center flex-column" style="height: 100%">
+    <div asp-validation-summary="ModelOnly" class="validation-message" style="font-size: 30px;"></div>
+    <form method="post">
+        <div class="form-div flex-column">
+            <label asp-for="AuthLoginModel.UserNameModel.UserName" class="form-label" style="font-size: 30px;">Login</label>
+            <input asp-for="AuthLoginModel.UserNameModel.UserName" class="form-input" style="font-size: 30px;" />
+            <span asp-validation-for="AuthLoginModel.UserNameModel.UserName" class="validation-message"></span>
+        </div>
+        <div class="form-div flex-column">
+            <label asp-for="AuthLoginModel.PasswordModel.Password" class="form-label" style="font-size: 30px;">Password</label>
+            <input asp-for="AuthLoginModel.PasswordModel.Password" type="password" class="form-input" style="font-size: 30px;" />
+            <span asp-validation-for="AuthLoginModel.PasswordModel.Password" class="validation-message"></span>
+        </div>
+        <div class="form-div">
+            <input type="submit" value="Login" />
+        </div>
+        <div style="text-align:center; font-size: 20px">
+            <p>Don't have an account? <a asp-page="/Auth/Register">Register</a></p>
+            <p>Forget password? <a asp-page="/Auth/ResetPassword">Reset</a></p>
+        </div>
+    </form>
+</div>

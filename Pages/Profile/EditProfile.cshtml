@@ -1,0 +1,141 @@
+﻿@page "/Profile/Edit"
+@model WebApplication.Pages.Profile.EditProfileModel
+@{
+    ViewData["Title"] = "Edit profile";
+}
+
+@section Styles {
+    <link href="/css/forms.css" rel="stylesheet" />
+}
+
+<div class="flex-column" style="width: 700px; padding: 20px; gap: 30px; background-color: #101010">
+    <form method="post" asp-page-handler="UpdateProfilePicture" class="subform" enctype="multipart/form-data">
+        <div class="flex-column" style="gap: 20px;">
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="gap: 20px;">
+                    <div>
+                        <img src="@(Model.ApplicationUser?.AvatarPath ?? ViewData["defaultProfilePicturePath"])" alt="Profile picture" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid lightblue" />
+                    </div>
+                    <div class="center" style="flex-wrap: wrap;">
+                        <input type="file" name="File" accept=".jpg,.png,.gif" style="font-size: 25px;" />
+                    </div>
+                </div>
+                @if (ModelState.ContainsKey("ProfilePicture"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["ProfilePicture"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <input type="submit" class="subform-submit" value="Save" />
+        </div>
+    </form>
+    <form method="post" asp-page-handler="UpdateUserName" class="subform">
+        <div class="flex-column" style="gap: 20px;">
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 30px;">Username</span>
+                    <input type="text" name="UserName" style="font-size: 25px; height: 40px; width: 300px;" value="@Model.ApplicationUser!.UserName" maxlength="18" />
+                </div>
+                @if (ModelState.ContainsKey("UserName"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["UserName"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <input type="submit" class="subform-submit" value="Save" />
+        </div>
+    </form>
+    <form method="post" asp-page-handler="UpdateProfileDescription" class="subform">
+        <div class="flex-column" style="gap: 20px;">
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 30px;">Description</span>
+                    <textarea name="ProfileDescription" maxlength="200" style="font-size: 25px; width: 550px; min-height: 200px; resize: none;">@Model.ApplicationUser.ProfileDescription</textarea>
+                </div>
+                @if (ModelState.ContainsKey("ProfileDescription"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["ProfileDescription"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <input type="submit" class="subform-submit" value="Save" />
+        </div>
+    </form>
+    <form method="post" asp-page-handler="UpdatePassword" class="subform">
+        <div class="flex-column" style="gap: 20px;">
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 30px;">Current password</span>
+                    <input type="password" name="CurrentPassword" style="font-size: 25px; height: 40px; width: 300px;" maxlength="30" />
+                </div>
+                @if (ModelState.ContainsKey("CurrentPassword"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["CurrentPassword"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 30px;">New password</span>
+                    <input type="password" name="PasswordConfirmationModel.Password" style="font-size: 25px; height: 40px; width: 300px;" maxlength="30" />
+                </div>
+                @if (ModelState.ContainsKey("PasswordConfirmationModel.Password"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["PasswordConfirmationModel.Password"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="flex-column" style="gap: 10px;">
+                <div class="flex-row" style="align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 30px;">Confirm new password</span>
+                    <input type="password" name="PasswordConfirmationModel.PasswordConfirmation" style="font-size: 25px; height: 40px; width: 300px;" maxlength="30" />
+                </div>
+                @if (ModelState.ContainsKey("PasswordConfirmationModel.PasswordConfirmation"))
+                {
+                    <div class="validation-message">
+                        <ul>
+                            @foreach (var error in ModelState["PasswordConfirmationModel.PasswordConfirmation"]!.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <input type="submit" class="subform-submit" value="Save" />
+        </div>
+    </form>
+    <form method="post" asp-page-handler="DeleteProfile">
+        <input type="submit" value="Delete profile" style="background-color: red;" />
+    </form>
+</div>
