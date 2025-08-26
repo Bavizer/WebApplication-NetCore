@@ -39,6 +39,6 @@ public class ResetPasswordModel : PageModel
         string resetLink = Url.PageLink("SetNewPassword", values: new { UserId = user.Id, Token = token });
 
         await _emailSender.SendPasswordResetLinkAsync(user, EmailModel.Email, resetLink);
-        return RedirectToPage("~/Auth/Login");
+        return RedirectToPage("/Auth/Login");
     }
 }
